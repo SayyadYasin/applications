@@ -1,0 +1,11 @@
+{$DOMAIN} {
+	reverse_proxy web:3000
+}
+
+api.{$DOMAIN} {
+	reverse_proxy api:4000
+}
+
+admin.{$DOMAIN} {
+	reverse_proxy admin:80
+}
