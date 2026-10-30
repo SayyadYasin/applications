@@ -56,6 +56,8 @@ jobs:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions: { contents: read, packages: write }
+    env:
+      HAS_DEPLOY_SERVER: ${{ secrets.DEPLOY_HOST != '' && secrets.DEPLOY_KEY != '' }}
     steps:
       - uses: actions/checkout@v5
       - name: Lowercase image prefix
@@ -80,6 +82,7 @@ jobs:
           tags: "${{ env.IMAGE_PREFIX }}/admin:${{ github.sha }}"
           build-args: VITE_API_URL=${{ vars.API_URL }}
       - name: Deploy over SSH
+        if: env.HAS_DEPLOY_SERVER == 'true'
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.DEPLOY_HOST }}
